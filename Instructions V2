@@ -1,0 +1,9 @@
+How to Use This Script:
+
+Set Your Thresholds: Adjust the IMPRESSIONS_THRESHOLD, CLICKS_THRESHOLD, CTR_THRESHOLD, and CR_THRESHOLD variables at the top to match the minimum acceptable values for your campaigns.
+Set Your Email Address: Replace 'your-email@example.com' with your actual email address where you want to receive the alerts.
+
+Add the Script to Google Ads:
+ Go to your Google Ads account.
+ Click on Tools and Settings > Scripts.
+ Create a new script
