@@ -1,0 +1,16 @@
+How It Works:
+
+Thresholds: Set the minimum thresholds for impressions, clicks, CTR, and CR at the top of the script.
+Metrics Monitoring: The script runs daily (yesterday’s data) and checks each campaign’s performance.
+Email Alert: If any metric drops below your predefined threshold, it sends an alert email with the details.
+
+Instructions:
+
+Go to your Google Ads account.
+Navigate to Tools & Settings > Scripts.
+Create a new script, copy and paste the code above.
+Set your thresholds and email recipient at the top.
+Save and authorize the script.
+Schedule it to run daily so you can stay on top of your campaigns!
+
+Let me know if you need further customization!
