@@ -1,0 +1,55 @@
+// Google Ads Script to Monitor Impressions, Clicks, CTR, and CR
+// Sends an email if metrics drop below the defined thresholds
+
+// Set your thresholds here
+var IMPRESSIONS_THRESHOLD = 500;
+var CLICKS_THRESHOLD = 50;
+var CTR_THRESHOLD = 2; // in percentage
+var CR_THRESHOLD = 3; // in percentage
+var EMAIL_RECIPIENT = "your-email@example.com";
+
+function main() {
+  var report = AdsApp.report(
+    "SELECT CampaignName, Impressions, Clicks, Conversions, Cost " +
+    "FROM CAMPAIGN_PERFORMANCE_REPORT " +
+    "WHERE Impressions > 0 DURING YESTERDAY");
+
+  var rows = report.rows();
+  var alertMessage = "";
+  var shouldSendAlert = false;
+
+  while (rows.hasNext()) {
+    var row = rows.next();
+    var campaignName = row['CampaignName'];
+    var impressions = parseInt(row['Impressions']);
+    var clicks = parseInt(row['Clicks']);
+    var conversions = parseInt(row['Conversions']);
+    var ctr = (clicks / impressions) * 100;
+    var cr = (conversions / clicks) * 100;
+
+    if (impressions < IMPRESSIONS_THRESHOLD ||
+        clicks < CLICKS_THRESHOLD ||
+        ctr < CTR_THRESHOLD ||
+        cr < CR_THRESHOLD) {
+          
+      shouldSendAlert = true;
+      alertMessage += "Campaign: " + campaignName + "\n" +
+                      "Impressions: " + impressions + "\n" +
+                      "Clicks: " + clicks + "\n" +
+                      "CTR: " + ctr.toFixed(2) + "%\n" +
+                      "CR: " + cr.toFixed(2) + "%\n\n";
+    }
+  }
+
+  if (shouldSendAlert) {
+    sendAlert(alertMessage);
+  }
+}
+
+function sendAlert(message) {
+  MailApp.sendEmail({
+    to: EMAIL_RECIPIENT,
+    subject: "Google Ads Alert: Metrics Below Threshold",
+    body: "The following campaigns have metrics below the defined thresholds:\n\n" + message
+  });
+}
