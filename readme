@@ -1,0 +1,38 @@
+# Google Ads Metrics Alert Script 🚨
+
+## Overview
+
+This Google Ads script is designed to monitor your campaigns' key performance metrics—**impressions, clicks, CTR, and conversion rate (CR)**—and send you an email alert whenever one of these metrics drops below a preset threshold.
+
+With this script, you can automate the monitoring of your campaigns, saving you time and helping you respond more quickly to performance issues.
+
+## Features
+
+- Monitors the following metrics:
+  - **Impressions**
+  - **Clicks**
+  - **Click-Through Rate (CTR)**
+  - **Conversion Rate (CR)**
+- Sends an email alert when any metric falls below your defined threshold.
+- Easy to customize thresholds for each metric.
+- Simple setup in your Google Ads account.
+
+## Installation
+
+1. **Login to Google Ads**  
+   Log into your Google Ads account and navigate to the **Tools & Settings** menu (the wrench icon).
+
+2. **Create a New Script**  
+   - Go to **Scripts** under the **Bulk Actions** section.
+   - Click the "+" button to create a new script.
+   
+3. **Paste the Code**  
+   Copy the code from [this script](https://github.com/omarhishammousa/googleadsscripts/tree/Google-Ads-Alert-Metrics-Below-Threshold) and paste it into the script editor in your Google Ads account.
+
+4. **Set Metric Thresholds**  
+   Before running the script, customize the thresholds in the code to your desired values.  
+   ```javascript
+   var IMPRESSIONS_THRESHOLD = 500;
+   var CLICKS_THRESHOLD = 50;
+   var CTR_THRESHOLD = 0.02; // 2% expressed as a decimal
+   var CR_THRESHOLD = 0.03; // 3% expressed as a decimal
