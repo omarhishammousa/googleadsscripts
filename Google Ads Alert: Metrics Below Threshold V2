@@ -1,0 +1,65 @@
+function main() {
+  // Define your thresholds
+  var IMPRESSIONS_THRESHOLD = 500;
+  var CLICKS_THRESHOLD = 50;
+  var CTR_THRESHOLD = 0.02; // 2% expressed as a decimal
+  var CR_THRESHOLD = 0.03; // 3% expressed as a decimal
+
+  // Define the email address to send alerts to
+  var EMAIL = 'your-email@example.com';
+
+  // Get the current date for the report
+  var today = new Date();
+  var dateRange = Utilities.formatDate(today, AdsApp.currentAccount().getTimeZone(), 'yyyyMMdd');
+
+  // Query to get the campaign stats for today
+  var query = `
+    SELECT 
+      campaign.name, 
+      metrics.impressions, 
+      metrics.clicks, 
+      metrics.ctr, 
+      metrics.conversions, 
+      metrics.conversions_from_interactions_rate
+    FROM campaign
+    WHERE segments.date = '${dateRange}'
+  `;
+
+  var report = AdsApp.report(query);
+  var rows = report.rows();
+  var issues = [];
+
+  while (rows.hasNext()) {
+    var row = rows.next();
+    var campaignName = row['campaign.name'];
+    var impressions = parseInt(row['metrics.impressions'], 10);
+    var clicks = parseInt(row['metrics.clicks'], 10);
+    var ctr = parseFloat(row['metrics.ctr']);
+    var conversions = parseInt(row['metrics.conversions'], 10);
+    var conversionRate = parseFloat(row['metrics.conversions_from_interactions_rate']);
+
+    // Check if any metric is below the threshold
+    if (impressions < IMPRESSIONS_THRESHOLD) {
+      issues.push(`Campaign "${campaignName}" has low impressions: ${impressions}`);
+    }
+    if (clicks < CLICKS_THRESHOLD) {
+      issues.push(`Campaign "${campaignName}" has low clicks: ${clicks}`);
+    }
+    if (ctr < CTR_THRESHOLD) {
+      issues.push(`Campaign "${campaignName}" has low CTR: ${(ctr * 100).toFixed(2)}%`);
+    }
+    if (conversionRate < CR_THRESHOLD) {
+      issues.push(`Campaign "${campaignName}" has low Conversion Rate: ${(conversionRate * 100).toFixed(2)}%`);
+    }
+  }
+
+  // Send email if there are any issues
+  if (issues.length > 0) {
+    var subject = 'Alert: Google Ads Campaign Performance Issues';
+    var body = 'The following issues were detected in your campaigns today:\n\n' + issues.join('\n') + '\n\nPlease review and take action as needed.';
+    MailApp.sendEmail(EMAIL, subject, body);
+    Logger.log('Email sent with issues: ' + issues.join('; '));
+  } else {
+    Logger.log('No issues detected.');
+  }
+}
